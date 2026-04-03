@@ -108,31 +108,26 @@ export default function Checkout() {
   } | null>(null);
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
-  const { data: couponResult, refetch: refetchCoupon } = trpc.discounts.validateCoupon.useQuery(
-    { code: couponCode, subtotal },
-    { enabled: false }
-  );
+  const validateCouponMutation = trpc.discounts.validateCoupon.useMutation();
 
-  async function applyCoupon() {
+   async function applyCoupon() {
     if (!couponInput.trim()) {
       toast.error("Digite um código de cupom");
       return;
     }
     setIsApplyingCoupon(true);
     try {
-      setCouponCode(couponInput.toUpperCase().trim());
-      await new Promise(r => setTimeout(r, 100)); // Aguarda o state atualizar
-      const result = await refetchCoupon();
-      const data = result.data;
-
+      const code = couponInput.toUpperCase().trim();
+      const data = await validateCouponMutation.mutateAsync({ code, subtotal });
       if (data?.valid && data.coupon) {
         setAppliedCoupon({
           code: data.coupon.code,
-          type: data.coupon.type,
-          value: data.coupon.value,
-          discount: data.discount,
+          type: data.coupon.discountType,
+          value: data.coupon.discountValue,
+          discount: data.discountAmount,
           description: data.message,
         });
+        setCouponCode(code);
         setCouponInput("");
         toast.success(`Cupom aplicado! ${data.message}`);
       } else {

@@ -48,7 +48,8 @@ export const gasCountRouter = router({
         .where(eq(gasCount.countDate, date));
 
       const soldMap: Record<number, number> = {};
-      for (const row of soldToday as any[]) {
+      const soldTodayRows = (soldToday as any[])[0] as any[];
+      for (const row of soldTodayRows) {
         soldMap[row.productId] = Number(row.soldQty);
       }
 
@@ -58,7 +59,8 @@ export const gasCountRouter = router({
         manualMap[key] = row;
       }
 
-      const items = (products as any[]).map((p) => {
+      const productRows = (products as any[])[0] as any[];
+      const items = productRows.map((p) => {
         const sold = soldMap[p.id] ?? 0;
         const manual = manualMap[String(p.id)] ?? manualMap[p.name];
         // Cheios: prioridade = contagem manual > fullStockQty do banco > stockQty
@@ -99,7 +101,8 @@ export const gasCountRouter = router({
         WHERE o.status != 'cancelado'
           AND o.createdAt BETWEEN ${dateStart} AND ${dateEnd}
       `);
-      const revenue = Number((revenueToday as any[])[0]?.revenue ?? 0);
+      const revenueTodayRows = (revenueToday as any[])[0] as any[];
+      const revenue = Number(revenueTodayRows[0]?.revenue ?? 0);
 
       // Histórico de vendas últimos 7 dias
       const salesHistory = await db.execute(sql`
@@ -128,7 +131,7 @@ export const gasCountRouter = router({
           totalPhysical,
           revenue,
         },
-        salesHistory: (salesHistory as any[]).map((r) => ({
+        salesHistory: ((salesHistory as any[])[0] as any[]).map((r) => ({
           date: r.saleDate,
           totalSold: Number(r.totalSold),
           revenue: Number(r.revenue),

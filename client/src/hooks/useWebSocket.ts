@@ -24,7 +24,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
   const {
     url = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`,
     reconnectInterval = 3000,
-    maxReconnectAttempts = 5,
+    maxReconnectAttempts = 3,
     onMessage,
     onConnect,
     onDisconnect,
@@ -46,12 +46,10 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
       const ws = new WebSocket(url);
 
       ws.onopen = () => {
-        console.log('WebSocket conectado');
         setIsConnected(true);
         setIsConnecting(false);
         reconnectAttemptsRef.current = 0;
         onConnect?.();
-        toast.success('Conectado ao servidor');
       };
 
       ws.onmessage = (event) => {
@@ -64,35 +62,26 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
       };
 
       ws.onerror = (error) => {
-        console.error('Erro WebSocket:', error);
         setIsConnecting(false);
         onError?.(error);
       };
 
       ws.onclose = () => {
-        console.log('WebSocket desconectado');
         setIsConnected(false);
         setIsConnecting(false);
         onDisconnect?.();
 
-        // Tentar reconectar
+        // Tentar reconectar até o limite, depois para silenciosamente
         if (reconnectAttemptsRef.current < maxReconnectAttempts) {
           reconnectAttemptsRef.current++;
-          console.log(
-            `Tentando reconectar... (${reconnectAttemptsRef.current}/${maxReconnectAttempts})`
-          );
-
           reconnectTimeoutRef.current = setTimeout(() => {
             connect();
           }, reconnectInterval);
-        } else {
-          toast.error('Desconectado do servidor');
         }
       };
 
       wsRef.current = ws;
     } catch (error) {
-      console.error('Erro ao conectar WebSocket:', error);
       setIsConnecting(false);
     }
   }, [url, reconnectInterval, maxReconnectAttempts, onMessage, onConnect, onDisconnect, onError]);
@@ -111,10 +100,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
   const send = useCallback((message: WebSocketMessage) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(message));
-    } else {
-      console.warn('WebSocket não está conectado');
-      toast.error('Erro ao enviar mensagem');
     }
+    // Silenciar falhas quando WebSocket não está disponível
   }, []);
 
   useEffect(() => {

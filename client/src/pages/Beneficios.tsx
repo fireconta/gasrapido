@@ -42,7 +42,7 @@ const EMPTY_FORM = {
   name: "",
   description: "",
   type: "outro" as "desconto" | "vale_gas" | "frete_gratis" | "brinde" | "outro",
-  discountType: "fixo" as const,
+  discountType: "fixo" as "fixo" | "percentual",
   discountValue: 0,
   voucherProductName: "",
   isActive: true,
@@ -188,7 +188,7 @@ export default function Beneficios() {
     if (!grantCustomerId && !grantCustomerName.trim()) { toast.error("Selecione ou informe o cliente"); return; }
     grantMutation.mutate({
       benefitId: grantBenefitId,
-      customerId: grantCustomerId ?? undefined,
+      customerId: grantCustomerId ?? 0,
       customerName: grantCustomerName,
     });
   }

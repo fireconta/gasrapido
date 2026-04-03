@@ -10,14 +10,19 @@ interface WebSocketNotification {
   channel?: string;
 }
 
+const MAX_RECONNECT_ATTEMPTS = 3;
+const BASE_RECONNECT_DELAY = 2000;
+
 /**
- * Hook para conectar ao WebSocket e receber notificações em tempo real
+ * Hook para conectar ao WebSocket e receber notificações em tempo real.
+ * Silencia erros após MAX_RECONNECT_ATTEMPTS tentativas para evitar
+ * spam no console quando o ambiente não suporta WebSocket.
  */
 export function useWebSocketNotifications() {
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const reconnectAttemptsRef = useRef(0);
 
   const { addNotification } = useNotification() as any;
   const { user } = useAuth();
@@ -29,79 +34,11 @@ export function useWebSocketNotifications() {
     return `${protocol}//${host}/ws`;
   }, []);
 
-  // Conectar ao WebSocket
-  const connect = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      return;
-    }
-
-    try {
-      const url = getWebSocketUrl();
-      console.log('[WebSocket] Conectando a:', url);
-
-      const ws = new WebSocket(url);
-
-      ws.onopen = () => {
-        console.log('[WebSocket] Conectado');
-        setIsConnected(true);
-        setReconnectAttempts(0);
-
-        // Inscrever nos canais apropriados
-        if (user) {
-          const message = {
-            type: 'subscribe',
-            channel: `user:${user.id}`,
-            userId: user.id,
-            userRole: user.role,
-          };
-          ws.send(JSON.stringify(message));
-
-          // Inscrever em canal de broadcast
-          ws.send(
-            JSON.stringify({
-              type: 'subscribe',
-              channel: 'broadcast',
-            })
-          );
-
-          console.log(`[WebSocket] Inscrito em canais: user:${user.id}, broadcast`);
-        }
-      };
-
-      ws.onmessage = (event) => {
-        try {
-          const message: WebSocketNotification = JSON.parse(event.data);
-          handleWebSocketMessage(message);
-        } catch (e) {
-          console.error('[WebSocket] Erro ao parsear mensagem:', e);
-        }
-      };
-
-      ws.onerror = (error) => {
-        console.error('[WebSocket] Erro:', error);
-        setIsConnected(false);
-      };
-
-      ws.onclose = () => {
-        console.log('[WebSocket] Desconectado');
-        setIsConnected(false);
-        attemptReconnect();
-      };
-
-      wsRef.current = ws;
-    } catch (e) {
-      console.error('[WebSocket] Erro ao conectar:', e);
-      attemptReconnect();
-    }
-  }, [user, getWebSocketUrl]);
-
-  // Manipular mensagem do WebSocket
+  // Manipular mensagem do WebSocket (declarado antes de connect)
   const handleWebSocketMessage = useCallback(
     (message: WebSocketNotification) => {
       if (message.type === 'notification' && message.notification) {
         const notif = message.notification;
-
-        // Adicionar notificação ao contexto
         addNotification({
           id: notif.id,
           type: notif.type,
@@ -113,39 +50,85 @@ export function useWebSocketNotifications() {
           sound: notif.sound,
           icon: notif.icon,
         });
-
-        console.log('[WebSocket] Notificação recebida:', notif.title);
-      } else if (message.type === 'pong') {
-        // Responder ao heartbeat
-        console.log('[WebSocket] Pong recebido');
       }
     },
     [addNotification]
   );
 
-  // Tentar reconectar
-  const attemptReconnect = useCallback(() => {
-    setReconnectAttempts((prev) => {
-      const attempts = prev + 1;
-      const delay = Math.min(1000 * Math.pow(2, attempts - 1), 30000); // Backoff exponencial
+  // Conectar ao WebSocket
+  const connect = useCallback(() => {
+    // Não tentar se já passou do limite de tentativas
+    if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+      return;
+    }
 
-      console.log(`[WebSocket] Tentando reconectar em ${delay}ms (tentativa ${attempts})`);
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      return;
+    }
 
-      reconnectTimeoutRef.current = setTimeout(() => {
-        connect();
-      }, delay);
+    try {
+      const url = getWebSocketUrl();
+      const ws = new WebSocket(url);
 
-      return attempts;
-    });
-  }, [connect]);
+      ws.onopen = () => {
+        setIsConnected(true);
+        reconnectAttemptsRef.current = 0;
+
+        if (user) {
+          ws.send(JSON.stringify({
+            type: 'subscribe',
+            channel: `user:${user.id}`,
+            userId: user.id,
+            userRole: user.role,
+          }));
+          ws.send(JSON.stringify({
+            type: 'subscribe',
+            channel: 'broadcast',
+          }));
+        }
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const message: WebSocketNotification = JSON.parse(event.data);
+          handleWebSocketMessage(message);
+        } catch (e) {
+          // Silenciar erros de parse
+        }
+      };
+
+      ws.onerror = () => {
+        // Silenciar erros de conexão para não poluir o console
+        setIsConnected(false);
+      };
+
+      ws.onclose = () => {
+        setIsConnected(false);
+        wsRef.current = null;
+
+        // Tentar reconectar com backoff exponencial até o limite
+        if (reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS) {
+          reconnectAttemptsRef.current++;
+          const delay = BASE_RECONNECT_DELAY * Math.pow(2, reconnectAttemptsRef.current - 1);
+          reconnectTimeoutRef.current = setTimeout(() => {
+            connect();
+          }, delay);
+        }
+        // Após MAX_RECONNECT_ATTEMPTS, para silenciosamente
+      };
+
+      wsRef.current = ws;
+    } catch (e) {
+      // Silenciar erros de conexão
+    }
+  }, [user, getWebSocketUrl, handleWebSocketMessage]);
 
   // Enviar mensagem
   const send = useCallback((message: any) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(message));
-    } else {
-      console.warn('[WebSocket] WebSocket não está conectado');
     }
+    // Silenciar falhas quando WebSocket não está disponível
   }, []);
 
   // Desconectar
@@ -171,7 +154,7 @@ export function useWebSocketNotifications() {
 
   return {
     isConnected,
-    reconnectAttempts,
+    reconnectAttempts: reconnectAttemptsRef.current,
     send,
     disconnect,
     reconnect: connect,

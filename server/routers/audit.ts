@@ -7,7 +7,7 @@ import { z } from "zod";
 import { router, adminProcedure } from "../_core/trpc";
 import { getDb } from "../db";
 import { auditLogs } from "../../drizzle/schema";
-import { and, gte, lte, eq, like, desc, type SQL } from "drizzle-orm";
+import { and, gte, lte, eq, like, desc, count, sql, type SQL } from "drizzle-orm";
 
 export const auditRouter = router({
   // Listar logs com filtros
@@ -64,7 +64,7 @@ export const auditRouter = router({
 
       // Contar total de registros
       const countResult = await db
-        .select({ count: auditLogs.id })
+        .select({ count: count(auditLogs.id) })
         .from(auditLogs)
         .where(whereClause);
 
@@ -92,13 +92,13 @@ export const auditRouter = router({
     const stats = await db
       .select({
         action: auditLogs.action,
-        count: auditLogs.id,
+        count: count(auditLogs.id),
       })
       .from(auditLogs)
       .where(gte(auditLogs.createdAt, last24h))
       .groupBy(auditLogs.action);
 
-    const totalLast24h = stats.reduce((sum, s) => sum + 1, 0);
+    const totalLast24h = stats.reduce((sum, s) => sum + s.count, 0);
 
     return {
       totalLast24h,
