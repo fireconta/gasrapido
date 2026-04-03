@@ -3,7 +3,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { maskPhone, maskCep } from "@/lib/masks";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { Settings, Save, Store, Phone, MapPin, Clock, Truck, Wifi, WifiOff, Globe } from "lucide-react";
+import { Settings, Save, Store, Phone, MapPin, Clock, Truck, Wifi, WifiOff, Globe, Map, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +25,7 @@ interface SettingsForm {
   adminEmail: string;
   lowStockThreshold: string;
   timezone: string;
+  googleMapsApiKey: string;
 }
 
 const DEFAULT_SETTINGS: SettingsForm = {
@@ -42,10 +43,12 @@ const DEFAULT_SETTINGS: SettingsForm = {
   adminEmail: "admin@gasrapido.com",
   lowStockThreshold: "10",
   timezone: "America/Sao_Paulo",
+  googleMapsApiKey: "",
 };
 
 export default function Configuracoes() {
   const [form, setForm] = useState<SettingsForm>(DEFAULT_SETTINGS);
+  const [showApiKey, setShowApiKey] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -89,6 +92,7 @@ export default function Configuracoes() {
         adminEmail: settings.adminEmail ?? prev.adminEmail,
         lowStockThreshold: settings.lowStockThreshold ?? prev.lowStockThreshold,
         timezone: settings.timezone ?? prev.timezone,
+        googleMapsApiKey: settings.googleMapsApiKey ?? prev.googleMapsApiKey,
       }));
     }
   }, [settings]);
@@ -114,6 +118,7 @@ export default function Configuracoes() {
       adminEmail: form.adminEmail,
       lowStockThreshold: form.lowStockThreshold,
       timezone: form.timezone,
+      googleMapsApiKey: form.googleMapsApiKey,
     });
   }
 
@@ -403,6 +408,57 @@ export default function Configuracoes() {
               <p className="text-xs text-muted-foreground mt-1.5">
                 Você receberá notificações quando o estoque de um produto ficar abaixo deste valor.
               </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Google Maps */}
+        <Card className="shadow-sm overflow-hidden">
+          <CardHeader className="pb-3 bg-gradient-to-r from-teal-50/80 to-card border-b border-teal-100/60">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-teal-100 flex items-center justify-center">
+                <Map className="w-3.5 h-3.5 text-teal-600" />
+              </div>
+              Google Maps
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label className="text-xs font-medium text-muted-foreground">API Key do Google Maps</Label>
+              <div className="relative mt-1">
+                <Input
+                  type={showApiKey ? "text" : "password"}
+                  value={form.googleMapsApiKey}
+                  onChange={(e) => handleChange("googleMapsApiKey", e.target.value)}
+                  placeholder="AIzaSy..."
+                  className="pr-10 font-mono text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowApiKey((v) => !v)}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5">
+                Necessária para exibir o mapa de rastreamento GPS dos entregadores. Obtenha em{" "}
+                <a
+                  href="https://console.cloud.google.com/apis/credentials"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-teal-600 hover:underline"
+                >
+                  console.cloud.google.com
+                </a>
+                {" "}→ APIs &amp; Services → Credentials → Create API Key. Ative a <strong>Maps JavaScript API</strong>.
+              </p>
+              {form.googleMapsApiKey && (
+                <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  API Key configurada
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

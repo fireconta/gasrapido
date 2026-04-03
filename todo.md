@@ -37,3 +37,6 @@
 - [x] Adicionar campo de cupom visível no formulário de Novo Pedido do painel admin com validação via API
 - [x] Corrigir validateCoupon de query para mutation (compatibilidade com frontend)
 - [x] Sempre entregar checkpoint + ZIP juntos ao usuário
+- [x] Integrar API Key no componente Map.tsx com suporte a chave personalizada e fallback para proxy Manus
+- [x] Salvar Google Maps API Key como configuração no banco de dados (tabela settings via googleMapsApiKey)
+- [x] Adicionar campo de edição da API Key na página de Configurações do painel admin (com show/hide e link para console Google)

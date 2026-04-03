@@ -21,6 +21,7 @@ const settingsSchema = z.object({
   instagram: z.string().optional(),
   facebook: z.string().optional(),
   timezone: z.string().optional(),
+  googleMapsApiKey: z.string().optional(),
 });
 
 export const settingsRouter = router({

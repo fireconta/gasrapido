@@ -49,6 +49,9 @@ export default function TrackingMap() {
     refetchInterval: 10000,
   });
 
+  const { data: settings } = trpc.settings.getAll.useQuery();
+  const googleMapsApiKey = (settings as any)?.googleMapsApiKey as string | undefined;
+
   const { data: stats } = trpc.tracking.getTrackingStats.useQuery(undefined, {
     refetchInterval: 10000,
   });
@@ -232,7 +235,12 @@ export default function TrackingMap() {
               </CardHeader>
               <CardContent className="p-0">
                 <div style={{ height: "520px", width: "100%" }}>
-                  <MapView onMapReady={handleMapReady} />
+                  <MapView
+                    onMapReady={handleMapReady}
+                    apiKey={googleMapsApiKey || undefined}
+                    initialCenter={{ lat: -18.4547, lng: -50.4431 }}
+                    initialZoom={14}
+                  />
                 </div>
               </CardContent>
             </Card>
