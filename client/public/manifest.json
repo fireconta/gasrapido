@@ -1,0 +1,41 @@
+{
+  "name": "Gás Rápido — Quirinópolis",
+  "short_name": "Gás Rápido",
+  "description": "Entrega expressa de botijões de gás em Quirinópolis, GO. P2, P13 e P45 em até 30 minutos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ef4444",
+  "lang": "pt-BR",
+  "categories": ["shopping", "logistics", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663440586062/arYUDk84fBUb5vUB52rDcp/gas-rapido-icon_35041320.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663440586062/arYUDk84fBUb5vUB52rDcp/gas-rapido-icon_35041320.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663440586062/arYUDk84fBUb5vUB52rDcp/gas-rapido-icon_35041320.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Fazer Pedido",
+      "short_name": "Pedido",
+      "description": "Pedir gás agora",
+      "url": "/",
+      "icons": [{ "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663440586062/arYUDk84fBUb5vUB52rDcp/gas-rapido-icon_35041320.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Painel do Entregador",
+      "short_name": "Entregador",
+      "description": "Acessar painel do entregador",
+      "url": "/entregador",
+      "icons": [{ "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663440586062/arYUDk84fBUb5vUB52rDcp/gas-rapido-icon_35041320.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

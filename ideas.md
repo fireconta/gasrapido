@@ -1,43 +1,48 @@
-# Ideias de Design — Gás Rápido (site básico, apenas texto)
+# Ideias de Design — Gás Rápido
+
+## Contexto
+Site básico, apenas texto, para uma distribuidora de gás chamada "Gás Rápido".
+
+---
 
 <response>
 <idea>
-**Design Movement:** Brutalismo tipográfico
-**Core Principles:** Hierarquia clara, contraste extremo, ausência de ornamentos, texto como único elemento visual
-**Color Philosophy:** Fundo branco puro, texto preto intenso, um único acento em laranja-fogo para urgência e energia
-**Layout Paradigm:** Bloco vertical centralizado com margens generosas; seções separadas por linhas horizontais espessas
-**Signature Elements:** Tipografia condensada em caixa-alta para o nome; separadores em negrito
-**Interaction Philosophy:** Sem interações complexas; hover sutil em links
-**Animation:** Nenhuma animação — estático e direto
-**Typography System:** Fonte display bold para títulos (ex: Oswald), fonte sans-serif para corpo (ex: Roboto)
+**Design Movement:** Tipografia Editorial Utilitária
+**Core Principles:** Hierarquia tipográfica clara; paleta monocromática com um acento quente; ausência total de imagens; espaçamento generoso.
+**Color Philosophy:** Fundo branco-gelo (#F8F7F4), texto carvão (#1A1A1A), acento laranja-chama (#E8500A) para remeter ao fogo do gás sem usar ícones.
+**Layout Paradigm:** Coluna central estreita (max-w-xl), alinhamento à esquerda, seções separadas por linhas finas.
+**Signature Elements:** Número de telefone em tipografia display grande; linha divisória laranja fina; rodapé minimalista com horário de funcionamento.
+**Interaction Philosophy:** Sem animações; foco total na leitura rápida.
+**Animation:** Nenhuma — pureza estática.
+**Typography System:** Títulos em "Playfair Display" bold; corpo em "Source Serif 4" regular 18px.
+</idea>
+<probability>0.08</probability>
+</response>
+
+<response>
+<idea>
+**Design Movement:** Brutalismo Tipográfico Leve
+**Core Principles:** Texto grande e direto; contraste extremo preto/amarelo; estrutura de grade rígida; sem decoração.
+**Color Philosophy:** Fundo amarelo-gás (#FFD600), texto preto absoluto (#000000) — referência visual a cilindros de gás.
+**Layout Paradigm:** Duas colunas assimétricas no desktop; bloco de título ocupa 70% da largura; coluna lateral com contato.
+**Signature Elements:** Nome "GÁS RÁPIDO" em caixa alta com tracking largo; separadores em borda preta espessa; telefone em destaque absoluto.
+**Interaction Philosophy:** Hover muda fundo de seção para preto com texto amarelo.
+**Animation:** Transição de cor de fundo em 150ms no hover.
+**Typography System:** "Space Grotesk" bold para tudo; tamanhos: 72px título, 18px corpo.
 </idea>
 <probability>0.07</probability>
 </response>
 
 <response>
 <idea>
-**Design Movement:** Minimalismo editorial
-**Core Principles:** Espaço em branco como protagonista, tipografia como único elemento decorativo, leitura fluida
-**Color Philosophy:** Fundo off-white (#F5F5F0), texto cinza-escuro (#1A1A1A), acento azul-petróleo para links
-**Layout Paradigm:** Coluna única estreita centralizada, estilo artigo de jornal
-**Signature Elements:** Linha fina acima do título principal; espaçamento generoso entre seções
-**Interaction Philosophy:** Links com sublinhado ao hover; sem efeitos visuais pesados
-**Animation:** Fade-in suave na entrada da página
-**Typography System:** Georgia para títulos, system-ui para corpo
+**Design Movement:** Modernismo Funcional Quente
+**Core Principles:** Limpeza visual; calor cromático; legibilidade máxima; estrutura em bloco.
+**Color Philosophy:** Fundo areia claro (#FDF6EC), acento vermelho-tijolo (#C0392B), texto escuro (#2C2C2C) — paleta que remete a botijões e calor doméstico.
+**Layout Paradigm:** Layout de página única com seções empilhadas; cabeçalho com nome grande à esquerda e telefone à direita; seções com padding generoso.
+**Signature Elements:** Cabeçalho bipartido (nome + contato); seção "Como Pedir" em lista numerada estilizada; rodapé com endereço e horário.
+**Interaction Philosophy:** Estático, foco em clareza informacional.
+**Animation:** Nenhuma.
+**Typography System:** "DM Serif Display" para títulos; "DM Sans" para corpo — par coeso e moderno.
 </idea>
-<probability>0.06</probability>
-</response>
-
-<response>
-<idea>
-**Design Movement:** Utilitarismo direto
-**Core Principles:** Clareza absoluta, informação imediata, sem distrações, funcional acima de tudo
-**Color Philosophy:** Fundo branco, texto escuro, laranja como cor de destaque para nome e chamadas
-**Layout Paradigm:** Layout de cartão central com padding generoso; seções bem delimitadas
-**Signature Elements:** Nome da empresa em destaque no topo; rodapé simples com contato
-**Interaction Philosophy:** Estático, sem interações além de links básicos
-**Animation:** Nenhuma
-**Typography System:** Fonte sans-serif limpa (ex: DM Sans) para tudo, variando peso
-</idea>
-<probability>0.05</probability>
+<probability>0.09</probability>
 </response>

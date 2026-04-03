@@ -1,0 +1,7 @@
+ID,Nome Produto,Descrição,Preço,Tipo,Categoria,Estoque Cheio,Estoque Vazio,Status,Visível,Data Atualização
+1,Botíjão de Gás 13kg,Botíjão GLP 13kg. Ideal para uso doméstico. Entrega rápida na sua porta.,120.00,gas,botijao,129,10,ativo,sim,2026-04-03
+2,Botíjão de Gás 20kg,Botíjão GLP 20kg. Ideal para comércios e restaurantes.,180.00,gas,botijao,3,5,ativo,sim,2026-04-03
+3,Botíjão de Gás 45kg,Botíjão GLP 45kg. Para grandes estabelecimentos e indústrias.,380.00,gas,botijao,1,3,ativo,sim,2026-04-03
+4,Água Mineral 20L,Galão de água mineral natural 20 litros. Entrega com troca de vasilhame.,18.00,agua,agua,40,10,ativo,sim,2026-03-16
+5,Mangueira de Gás 1,20m,Mangueira de gás com 1,20m. Alta resistência e segurança.,28.00,acessorio,acessorio,20,5,ativo,sim,2026-03-16
+6,Regulador de Gás,Regulador de pressão para botíjão. Homologado pelo INMETRO.,35.00,acessorio,acessorio,15,5,ativo,sim,2026-03-16

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1775132333647,
+      "tag": "0000_aromatic_purple_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1775175295262,
+      "tag": "0001_clear_warpath",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1775238024532,
+      "tag": "0002_superb_liz_osborn",
+      "breakpoints": true
+    }
+  ]
+}

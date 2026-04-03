@@ -1,0 +1,39 @@
+# Gás Rápido — TODO
+
+- [x] Corrigir colunas faltantes na tabela benefits (discountType, discountValue, voucherProductId, voucherProductName, requiresMinOrder, maxUsesPerCustomer, totalUses)
+- [x] Comparar schema Drizzle vs banco real e corrigir todas as divergências (21 colunas adicionadas em 9 tabelas: customer_benefits, payment_discounts, gas_vouchers, truck_delivery_items, whatsapp_message_log, gas_replenishment, gas_replenishment_items, discount_coupons)
+- [x] Varredura completa de todos os routers do painel admin — 35 colunas adicionadas ao banco (sync-schema-full.mjs)
+- [x] Reescrever schema Drizzle completo alinhado com banco real (todas as tabelas)
+- [x] Corrigir erros TypeScript do servidor: audit_logs (resourceName, actionType, userEmail, resourceType, resourceId, success), gasCount (null em fullQty/emptyQty), orders (success: 1→true, total null), pushNotifications (null em p256dhKey/authKey), db.ts (total null)
+- [x] Corrigir erros TypeScript do frontend: WhatsApp.tsx (null em config), Pedidos.tsx (subtotal, discount null), Relatorios.tsx (total null), ValeGas.tsx (issuedAt null), Clientes/PedidoDetail/Rastrear/Tracking (formatCurrency aceita null)
+- [x] Adicionar colunas ao banco: credit_notes (description, notifiedAt), audit_logs (resourceType, resourceId, success, resourceName, actionType, userEmail), stock_movements (orderId), order_items (subtotal)
+- [x] Zero erros TypeScript em todo o projeto (189 erros → 0)
+- [x] Busca por nome ou CPF na página de clientes do painel admin
+- [x] Corrigir erro de query na página de clientes (coluna cpf faltando no banco)
+- [x] Importar dados do backup SQL (gas_rapido_backup_20260326_full.sql): 26 clientes reais de Quirinópolis/GO, 1 pedido, 6 produtos atualizados, entregador, cupom, benefício, configurações, movimentações de estoque
+- [x] Máscara automática de CPF no formulário de clientes (999.999.999-99) usando maskCpf centralizado de lib/masks.ts
+- [x] Exportação CSV atualizada com colunas: ID, Nome, CPF, Telefone, E-mail, Endereço, Número, Bairro, Cidade, Observações, Total Pedidos, Total Gasto, Cadastrado em
+- [x] Adicionar campo isVisible ao schema de produtos para controlar visibilidade na loja
+- [x] Toggle de visibilidade na página de Produtos do painel admin (mostrar/ocultar na loja)
+- [x] Filtrar apenas produtos visíveis na página de compra dos clientes (Home/loja)
+- [x] ValeGas: carregar opções de produtos dinamicamente do banco de dados
+- [x] Corrigir aparência do rastreamento GPS e adicionar toggle online/offline na página
+- [x] Corrigir estoque de gás: exibir e gerenciar cheios e vazios separadamente
+- [x] Corrigir contagem de gás automática (GasCountingPage)
+- [x] Bug: número do endereço não preenche automaticamente ao selecionar cliente no formulário de novo pedido
+- [x] Bug: seleção de cliente antiga persiste ao reabrir o formulário de novo pedido
+- [x] Bug: erro no console ao criar pedido (DialogDescription faltando nos Dialogs)
+- [x] Revisão geral do sistema de pedidos: CustomerSelect atualizado com addressNumber/complement, resetNewOrder limpa selectedCustomer, botão Novo Pedido chama reset ao abrir
+- [x] Corrigir desconto em reais (fixo) no sistema de pedidos — implementado cálculo correto
+- [x] Adicionar campo de cupom/código de desconto visível no formulário de pedido
+- [x] Melhorar sistema de vale gás com busca de clientes, seleção rápida de validade e tabela completa
+- [x] Implementar busca de clientes no Checkout e ValeGas (busca case-insensitive por nome/telefone/CPF)
+- [x] Criar rota pública customers.search para uso no checkout sem requerer admin
+- [x] Corrigir busca case-insensitive (nomes em maiúsculas encontrados com minúsculas)
+- [x] Validar cupom DESCONTO10 e GAS10 via API (ambos funcionando)
+- [x] Testar sistema de vale gás completo com emissão e baixa
+- [x] Melhorar sistema de benefícios: produtos dinâmicos do banco, botão Conceder com busca de clientes, presets de desconto percentual, import de Loader2 e useRef/useEffect
+- [x] Corrigir desconto NaN no formulário de Novo Pedido do painel admin (parseCurrency corrige R$ 10,00 → 10.00)
+- [x] Adicionar campo de cupom visível no formulário de Novo Pedido do painel admin com validação via API
+- [x] Corrigir validateCoupon de query para mutation (compatibilidade com frontend)
+- [x] Sempre entregar checkpoint + ZIP juntos ao usuário
